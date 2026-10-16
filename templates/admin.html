@@ -1,0 +1,157 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="max-width:1200px;margin:30px auto;padding:16px;">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div>
+            <h1>Admin Dashboard</h1>
+            <p class="muted">Manage farmer accounts and review crop prediction activity.</p>
+        </div>
+
+        <form action="{{ url_for('admin_logout') }}" method="POST">
+            <button type="submit" class="secondary">Logout</button>
+        </form>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <p class="muted">
+        Database status:
+        <strong>{{ mongo_status }}</strong>
+    </p>
+
+    <!-- Summary cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:24px 0;">
+        <div class="panel">
+            <p class="muted">Registered Farmers</p>
+            <h2>{{ user_count }}</h2>
+        </div>
+
+        <div class="panel">
+            <p class="muted">Farmer Profiles</p>
+            <h2>{{ profile_count }}</h2>
+        </div>
+
+        <div class="panel">
+            <p class="muted">Crop Predictions</p>
+            <h2>{{ prediction_count }}</h2>
+        </div>
+    </div>
+
+    <!-- Farmer accounts -->
+    <section class="panel" style="margin-bottom:24px;">
+        <h2>Farmer Accounts</h2>
+        <p class="muted">Showing up to 100 accounts.</p>
+
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th style="padding:12px;text-align:left;">Name</th>
+                        <th style="padding:12px;text-align:left;">Email</th>
+                        <th style="padding:12px;text-align:left;">Location</th>
+                        <th style="padding:12px;text-align:left;">Farm Size (acres)</th>
+                        <th style="padding:12px;text-align:left;">Registered</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for u in users %}
+                    {% set profile = u.get('profile', {}) or {} %}
+                    <tr>
+                        <td style="padding:12px;">{{ u.get('name', '—') }}</td>
+                        <td style="padding:12px;">{{ u.get('email', '—') }}</td>
+                        <td style="padding:12px;">
+                            {{ profile.get('district', '—') }},
+                            {{ profile.get('state', '') }}
+                        </td>
+                        <td style="padding:12px;">
+                            {{ profile.get('farm_size_acres', '—') }}
+                        </td>
+                        <td style="padding:12px;">
+                            {{ u.get('created_at', '—') }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" style="padding:16px;text-align:center;">
+                            No farmer accounts found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Recent predictions -->
+    <section class="panel">
+        <h2>Recent Crop Predictions</h2>
+        <p class="muted">Showing up to 20 records.</p>
+
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th style="padding:12px;text-align:left;">Date</th>
+                        <th style="padding:12px;text-align:left;">Farmer Email</th>
+                        <th style="padding:12px;text-align:left;">Location</th>
+                        <th style="padding:12px;text-align:left;">Season</th>
+                        <th style="padding:12px;text-align:left;">Top Crop</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for r in predictions %}
+                    {% set crops = r.get('top_crops', []) or [] %}
+                    <tr>
+                        <td style="padding:12px;">
+                            {{ r.get('created_at', '—') }}
+                        </td>
+                        <td style="padding:12px;">
+                            {{ r.get('farmer_email', 'Farmer account') }}
+                        </td>
+                        <td style="padding:12px;">
+                            {{ r.get('district', '—') }},
+                            {{ r.get('state', '') }}
+                        </td>
+                        <td style="padding:12px;">
+                            {{ r.get('season', '—') }}
+                        </td>
+                        <td style="padding:12px;">
+                            {% if crops %}
+                                {{ crops[0].get('crop', '—') }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" style="padding:16px;text-align:center;">
+                            No crop predictions found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <p class="muted" style="margin-top:20px;">
+        This dashboard is for authorized project administration.
+        Password hashes are not displayed.
+    </p>
+</div>
+{% endblock %}
+ 

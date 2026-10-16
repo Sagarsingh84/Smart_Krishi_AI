@@ -1,0 +1,10 @@
+crop,season,n_min,n_max,p_min,p_max,k_min,k_max,ph_min,ph_max,rain_min,rain_max,soil_types,water_need,yield_tonnes_per_acre,price_inr_per_tonne,cost_inr_per_acre,notes
+Rice,Kharif,60,120,20,60,30,100,5,7,900,2200,Alluvial;Clay;Loamy,High,1.8,22000,28000,Needs reliable water
+Maize,Kharif,50,120,25,70,30,100,5.5,7.5,500,1200,Loamy;Alluvial;Red,Medium,1.5,21000,18000,Check local market
+Cotton,Kharif,40,100,20,60,30,100,5.5,8,500,1000,Black;Loamy,Medium,0.8,65000,26000,Price and pest risks
+Soybean,Kharif,35,80,20,60,20,80,6,7.5,450,1000,Black;Loamy;Red,Medium,0.7,43000,17000,Avoid waterlogging
+Millet (Bajra),Kharif,20,60,15,45,15,60,5.5,8,250,650,Sandy;Red;Loamy,Low,0.6,26000,10000,Drought tolerant option
+Wheat,Rabi,50,110,20,60,25,90,6,7.5,250,650,Alluvial;Loamy;Clay,Medium,1.4,25000,19000,Check sowing window
+Chickpea (Chana),Rabi,20,60,20,60,15,60,6,8,250,600,Black;Loamy;Alluvial,Low,0.5,55000,14000,Check disease risks
+Mustard,Rabi,30,80,15,50,20,70,5.5,8,200,500,Loamy;Sandy;Alluvial,Low,0.55,52000,13000,Check local prices
+Sugarcane,Year-round,80,160,25,80,50,150,6,8,1000,2000,Black;Alluvial;Loamy,High,25,3500,85000,Long duration and water intensive
